@@ -20,11 +20,9 @@ Watch the car in action:
 
 ## Circuit Diagram
 
-The circuit image is currently stored as HEIC. If it doesn't render in the GitHub README, convert it to PNG or JPG and save it as `docs/circuit-diagram.png`.
+[Open or download the circuit image](docs/circuit.heic)
 
-![Circuit diagram](docs/circuit-diagram.png)
-
-[Open the original circuit image](docs/circuit.heic)
+> The uploaded circuit image is in HEIC format, which may not display inline in every browser. For an inline preview in the README, convert it to PNG or JPG and add it to this folder.
 
 ## Features
 
