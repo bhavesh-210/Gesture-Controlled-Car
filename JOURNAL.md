@@ -226,7 +226,7 @@ Time spent: 3 hours
 - [ ] **Non-Blocking Ultrasonic Sampling:** Replace `pulseIn()` with timer input capture or FreeRTOS task scheduling to eliminate telemetry blocking delays.
 
 ### 3D CAD Models & Mechanical Assets
-The mechanical structure was custom designed and 3D printed for this project. The [3D Cad/](3D%20Cad) directory contains both the native editable CAD sources and ready-to-print STL meshes:
+The mechanical structure was custom designed for this project. The [3D Cad/](3D%20Cad) directory contains native editable CAD sources and interchangeable solid models:
 
 - **Parametric CAD Archive:**
   - `The Nonchalant (1).f3d`: Autodesk Fusion 360 parametric design archive preserving the complete feature tree, sketches, and dimensional constraints.
@@ -237,20 +237,20 @@ The mechanical structure was custom designed and 3D printed for this project. Th
   - `Component2.step`: Motor mount standoff solid model
   - `Body25.step`: Structural bracket solid model
   - `Body21 (3) (1) (1) (1) (1) (2) (1).step`: Side fender clearance panel solid model
-- **Fabrication Meshes (STL):**
-  - All matching `.stl` files (`The Nonchalant.stl`, `Body22.stl`, `Body51.stl`, `Component2.stl`, `Body25.stl`, `Body21 (...).stl`) for slicing and 3D printing.
+
+All STEP files provide clean solid B-Rep geometry ready for parametric modification or export to slicing formats in tools like Autodesk Fusion 360, FreeCAD, PrusaSlicer, or Bambu Studio.
 
 ### Repository Directory Structure
 ```text
 Gesture-Controlled-Car/
-├── 3D Cad/                                # Mechanical CAD models (F3D, STEP, and STL)
+├── 3D Cad/                                # Mechanical CAD models (F3D archive & STEP solid models)
 │   ├── The Nonchalant (1).f3d             # Fusion 360 parametric source archive
-│   ├── The Nonchalant.step & .stl         # Front nameplate
-│   ├── Body22.step & .stl                 # Lower chassis baseplate
-│   ├── Body51.step & .stl                 # Upper deck plate
-│   ├── Component2.step & .stl             # Motor mount standoff
-│   ├── Body25.step & .stl                 # Structural bracket
-│   └── Body21 (...).step & .stl           # Side fender panel
+│   ├── The Nonchalant.step                # Front nameplate solid model
+│   ├── Body22.step                        # Lower chassis baseplate solid model
+│   ├── Body51.step                        # Upper deck plate solid model
+│   ├── Component2.step                    # Motor mount standoff solid model
+│   ├── Body25.step                        # Structural bracket solid model
+│   └── Body21 (...).step                  # Side fender panel solid model
 ├── GestureCarReceiver/
 │   └── GestureCarReceiver.ino             # Car receiver, motor driver & obstacle firmware
 ├── GestureController/

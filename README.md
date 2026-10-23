@@ -182,7 +182,7 @@ The receiver code uses the ESP32 Arduino Core v2.x LEDC API (`ledcSetup`, `ledcA
 ![3D model of the car and printed chassis assembly](docs/PHOTO-2026-10-23-01-56-13.jpg)
 *Figure: Custom 3D-printed chassis assembly ("The Nonchalant") featuring the embossed front bumper plate, motor mounting brackets, and top electronics deck.*
 
-The [3D Cad folder](3D%20Cad/) contains both genuine editable CAD sources and ready-to-slice STL meshes for the custom chassis parts:
+The [3D Cad folder](3D%20Cad/) contains genuine editable CAD sources and standardized solid models for all custom chassis components:
 
 - **Parametric CAD Source:**
   - `The Nonchalant (1).f3d`: Complete Autodesk Fusion 360 project archive containing full parametric sketch history, dimensional constraints, and feature timeline.
@@ -193,8 +193,8 @@ The [3D Cad folder](3D%20Cad/) contains both genuine editable CAD sources and re
   - `Component2.step`: Motor mounting bracket standoff
   - `Body25.step`: Structural brace and fastener anchor
   - `Body21 (3) (1) (1) (1) (1) (2) (1).step`: Side clearance panel
-- **Fabrication Meshes (STL):**
-  - Slicing meshes corresponding to each part (`The Nonchalant.stl`, `Body22.stl`, `Body51.stl`, `Component2.stl`, `Body25.stl`, `Body21 (...).stl`) for immediate 3D printing. Fabrication cost is not included in the BOM total.
+
+These solid models can be opened, modified, or exported directly for 3D printing in any modern CAD software or slicer (such as Autodesk Fusion 360, FreeCAD, PrusaSlicer, or Bambu Studio). Fabrication cost is not included in the BOM total.
 
 ### Possible future improvements
 
