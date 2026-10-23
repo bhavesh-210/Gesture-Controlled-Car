@@ -179,8 +179,8 @@ The receiver code uses the ESP32 Arduino Core v2.x LEDC API (`ledcSetup`, `ledcA
 
 ### 3D CAD files & editable source analysis
 
-![3D model of the car and printed chassis assembly](docs/PHOTO-2026-10-23-01-56-13.jpg)
-*Figure: Custom 3D-printed chassis assembly ("The Nonchalant") featuring the embossed front bumper plate, motor mounting brackets, and top electronics deck.*
+![Isometric CAD wireframe of The Nonchalant assembly, generated from the repository STEP geometry](docs/car-3d-model.svg)
+*Figure: Isometric wireframe preview derived from `3D Cad/The Nonchalant.step`. Use the linked STEP and Fusion 360 files for detailed inspection and editing.*
 
 The [3D Cad folder](3D%20Cad/) contains genuine editable CAD sources and standardized solid models for all custom chassis components:
 
