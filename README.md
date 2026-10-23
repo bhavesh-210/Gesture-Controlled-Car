@@ -27,13 +27,16 @@ The controller reads movement from an MPU-9250 inertial measurement unit (IMU), 
 
 ## 2. Hardware, Circuit Design & Bill of Materials
 
-### Circuit and assembly
+### Circuit diagram and assembled hardware
 
-![Gesture controller circuit diagram](docs/circuit-diagram.png)
+#### Circuit / wiring diagram
+![Gesture controller circuit and wiring diagram](docs/circuit-diagram.png)
+*Figure: Schematic circuit and wiring diagram for transmitter ESP32 and MPU-9250 IMU (original preserved at [docs/circuit.heic](docs/circuit.heic)).*
 
-![Internal electronics and wiring](docs/PHOTO-2026-10-23-02-08-37.jpg)
+#### Actual assembled hardware / build photo
+![Actual assembled hardware and internal electronics](docs/PHOTO-2026-10-23-02-08-37.jpg)
+*Figure: Physical assembled vehicle chassis showing internal electronics wiring, ESP32 microcontroller, L298N driver, motor cabling, and power switch.*
 
-The source circuit image is also preserved at [docs/circuit.heic](docs/circuit.heic).
 
 ### Priced Bill of Materials (BOM)
 
@@ -175,6 +178,9 @@ The receiver code uses the ESP32 Arduino Core v2.x LEDC API (`ledcSetup`, `ledcA
 ## 5. CAD, Future Improvements & Project Information
 
 ### 3D CAD files & editable source analysis
+
+![3D model of the car and printed chassis assembly](docs/PHOTO-2026-10-23-01-56-13.jpg)
+*Figure: Custom 3D-printed chassis assembly ("The Nonchalant") featuring the embossed front bumper plate, motor mounting brackets, and top electronics deck.*
 
 The [3D Cad folder](3D%20Cad/) contains STL mesh exports for the custom chassis parts (`The Nonchalant.stl`, `Body22.stl`, `Body51.stl`, `Component2.stl`, `Body25.stl`, `Body21 (...).stl`). Fabrication cost is not included in the BOM total.
 

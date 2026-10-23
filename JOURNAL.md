@@ -1,4 +1,13 @@
-# Gesture-Controlled Car ("The Nonchalant")
+---
+title: "Gesture-Controlled Car — The Nonchalant"
+github: "bhavesh-210/Gesture-Controlled-Car"
+description: "An ESP32-based robotics project that controls a four-wheel car using hand-tilt gestures, ESP-NOW wireless commands, PWM motor control, and HC-SR04 ultrasonic obstacle detection."
+total_time_spent: "21h"
+---
+
+# Gesture-Controlled Car ("The Nonchalant") — Build Journal
+
+**Total project time logged:** 21 hours (21h 00m across 5 devlog entries)
 
 An embedded-systems robotics project featuring a 4WD chassis driven by dual ESP32 microcontrollers, low-latency ESP-NOW peer-to-peer wireless telemetry, an MPU-9250 hand-gesture controller, an L298N dual H-bridge motor driver with hardware PWM speed regulation, autonomous ultrasonic obstacle avoidance, and a custom 3D-printed chassis.
 
@@ -9,7 +18,7 @@ An embedded-systems robotics project featuring a 4WD chassis driven by dual ESP3
 ![The Nonchalant - Completed Gesture Controlled Car Chassis](docs/PHOTO-2026-10-23-01-56-13.jpg)
 *Figure 1: Completed physical vehicle featuring custom 3D-printed chassis, four TT geared DC motors, and embossed front bumper plate.*
 
-> **Time spent:** 2h 30m
+Time spent: 2h 30m
 
 ### Project Description & Completed Status
 *The Nonchalant* is a fully completed physical prototype and embedded robotics system. The vehicle translates real-time hand movements into motion commands using an accelerometer-based wearable controller, wirelessly transmitting command packets over ESP-NOW to an onboard ESP32 receiver. The car independently monitors forward driving clearance using an ultrasonic rangefinder, safely halting and pivoting away if an obstacle enters its path.
@@ -37,7 +46,7 @@ An embedded-systems robotics project featuring a 4WD chassis driven by dual ESP3
 ![Chassis Internal Electronics and Wiring](docs/PHOTO-2026-10-23-02-08-37.jpg)
 *Figure 3: Internal electronics layout on chassis baseplate, including the ESP32 microcontroller, red L298N motor driver, TT motors, battery pack, and power switch.*
 
-> **Time spent:** 5 hours
+Time spent: 5 hours
 
 ### Bill of Materials (BOM)
 All components listed below reflect the physical hardware used in the build and verified against the repository assets:
@@ -89,7 +98,7 @@ All car receiver pins are verified directly from [GestureCarReceiver/GestureCarR
 ![Gesture Transmitter Schematic and Sensor Interfacing](docs/circuit-diagram.png)
 *Figure 4: Transmitter architecture schematic showing I2C line routing between the ESP32 microcontroller and the MPU-9250 IMU.*
 
-> **Time spent:** 6h 30m
+Time spent: 6h 30m
 
 ### Architectural Flowchart
 
@@ -172,7 +181,7 @@ In [GestureCarReceiver/GestureCarReceiver.ino](GestureCarReceiver/GestureCarRece
 ![Electronics Hardware Assembly and Test Layout](docs/PHOTO-2026-10-23-02-08-37.jpg)
 *Figure 5: Physical benchtop test arrangement showing interconnected components, common ground distribution, and motor driver cabling.*
 
-> **Time spent:** 4 hours
+Time spent: 4 hours
 
 ### Testing & Verification Status
 This table explicitly differentiates features verified through physical assets from those based on source-code inspection:
@@ -208,7 +217,7 @@ This table explicitly differentiates features verified through physical assets f
 ![Custom 3D-Printed Chassis Assembly ("The Nonchalant")](docs/PHOTO-2026-10-23-01-56-13.jpg)
 *Figure 6: Custom 3D-printed chassis components assembled with TT geared motors, demonstrating mechanical enclosure design.*
 
-> **Time spent:** 3 hours
+Time spent: 3 hours
 
 ### Future Improvements
 - [ ] **High-Efficiency MOSFET Motor Driver:** Transition from the L298N to a modern driver (e.g., TB6612FNG or DRV8833) to reduce thermal loss and extend battery runtime.
