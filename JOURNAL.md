@@ -9,6 +9,8 @@ An embedded-systems robotics project featuring a 4WD chassis driven by dual ESP3
 ![The Nonchalant - Completed Gesture Controlled Car Chassis](docs/PHOTO-2026-10-23-01-56-13.jpg)
 *Figure 1: Completed physical vehicle featuring custom 3D-printed chassis, four TT geared DC motors, and embossed front bumper plate.*
 
+> **Time spent:** 2h 30m
+
 ### Project Description & Completed Status
 *The Nonchalant* is a fully completed physical prototype and embedded robotics system. The vehicle translates real-time hand movements into motion commands using an accelerometer-based wearable controller, wirelessly transmitting command packets over ESP-NOW to an onboard ESP32 receiver. The car independently monitors forward driving clearance using an ultrasonic rangefinder, safely halting and pivoting away if an obstacle enters its path.
 
@@ -35,14 +37,23 @@ An embedded-systems robotics project featuring a 4WD chassis driven by dual ESP3
 ![Chassis Internal Electronics and Wiring](docs/PHOTO-2026-10-23-02-08-37.jpg)
 *Figure 3: Internal electronics layout on chassis baseplate, including the ESP32 microcontroller, red L298N motor driver, TT motors, battery pack, and power switch.*
 
-### Bill of Materials (Hardware Components)
-- **Microcontrollers:** 2x ESP32 Dev Modules (ESP-WROOM-32)
-- **Inertial Measurement Unit:** MPU-9250 9-DoF sensor module (I2C interface)
-- **Motor Driver:** L298N Dual H-Bridge motor driver module
-- **Drive Motors:** 4x TT geared DC motors with rubber wheels
-- **Distance Sensor:** HC-SR04 ultrasonic rangefinder
-- **Power System:** Rechargeable DC battery pack with dedicated chassis power rocker switch
-- **Chassis Structure:** 3D-printed mounting plates and front bumper plate (*The Nonchalant*)
+> **Time spent:** 5 hours
+
+### Bill of Materials (BOM)
+All components listed below reflect the physical hardware used in the build and verified against the repository assets:
+
+| Item # | Component Description | Qty | Key Specifications | Manufacturer / Datasheet Link | Role in Project |
+| :---: | :--- | :---: | :--- | :--- | :--- |
+| **1** | ESP32 Development Board (ESP-WROOM-32) | 2 | 240 MHz dual-core LX6, 520 KB SRAM, 2.4 GHz Wi-Fi & BLE, 30-pin DIP | [Espressif Systems ESP-WROOM-32 Datasheet](https://www.espressif.com/sites/default/files/documentation/esp-wroom-32_datasheet_en.pdf) | 1x Hand transmitter controller, 1x Car onboard receiver |
+| **2** | MPU-9250 9-Axis MotionTracking IMU | 1 | 3-axis gyro, 3-axis accelerometer, 3-axis magnetometer; I2C interface | [TDK InvenSense MPU-9250 Datasheet](https://invensense.tdk.com/wp-content/uploads/2015/02/PS-MPU-9250A-01-v1.1.pdf) | Hand tilt angle (pitch/roll) acquisition |
+| **3** | L298N Dual Full-Bridge Motor Driver Module | 1 | Dual H-bridge, 5V–35V drive voltage, up to 2A peak current per bridge | [STMicroelectronics / SparkFun L298 Datasheet](https://www.sparkfun.com/datasheets/Robotics/L298_H_Bridge.pdf) | Bi-directional DC motor drive & PWM regulation |
+| **4** | TT Geared DC Motors with Rubber Wheels | 4 | 3V–6V DC, 1:48 reduction gear ratio, dual output shaft, 65 mm tire | [Adafruit TT Motor Reference Guide](https://www.adafruit.com/product/3777) | 4WD vehicle drive train |
+| **5** | HC-SR04 Ultrasonic Distance Sensor | 1 | 5V DC supply, 2 cm–400 cm range, 15° beam angle, 40 kHz pulse | [Adafruit HC-SR04 Ultrasonic Sensor Guide](https://www.adafruit.com/product/3942) | Front obstacle clearance detection |
+| **6** | 4.8V Rechargeable Ni-MH Battery Pack | 1 | 4.8V nominal (4x 1.2V AA/AAA cells in series), ~700–1000 mAh capacity | [Energizer Ni-MH Rechargeable Battery Manual](https://data.energizer.com/pdfs/nickelmetalhydride_appman.pdf) | Main DC power source for car & motors |
+| **7** | Miniature SPST Rocker Power Switch | 1 | 2-pin rectangular snap-in rocker switch (KCD1 series) | [C&K Switches KCD1 Series Datasheet](https://www.ckswitches.com/media/1390/b.pdf) | Chassis master power disconnect |
+| **8** | Level Shifter / Voltage Divider Resistors | 1 set | 1kΩ / 2kΩ 1/4W resistors or 3.3V/5V bidirectional level shifter | [SparkFun Logic Level Converter Guide](https://learn.sparkfun.com/tutorials/bi-directional-logic-level-converter-hookup-guide) | Stepping 5V HC-SR04 ECHO down to ESP32 3.3V |
+| **9** | Prototyping Perfboard & Jumper Wire Set | 1 set | 2.54 mm pitch solderable perfboard, ~20x DuPont F-F / M-F jumpers | Standard 2.54 mm pitch electronics hardware | Signal distribution & power rails |
+| **10** | Custom 3D-Printed Chassis Kit | 1 set | FDM printed in PLA/PETG: baseplate, deck plate, bumper, brackets | Local repository STL assets in [3D Cad/](3D%20Cad) | Structural vehicle frame (*The Nonchalant*) |
 
 ### Controller Wiring (I2C)
 The hand transmitter pairs an ESP-WROOM-32 with an MPU-9250 IMU using the verified pin connections below:
@@ -77,6 +88,8 @@ All car receiver pins are verified directly from [GestureCarReceiver/GestureCarR
 
 ![Gesture Transmitter Schematic and Sensor Interfacing](docs/circuit-diagram.png)
 *Figure 4: Transmitter architecture schematic showing I2C line routing between the ESP32 microcontroller and the MPU-9250 IMU.*
+
+> **Time spent:** 6h 30m
 
 ### Architectural Flowchart
 
@@ -159,6 +172,8 @@ In [GestureCarReceiver/GestureCarReceiver.ino](GestureCarReceiver/GestureCarRece
 ![Electronics Hardware Assembly and Test Layout](docs/PHOTO-2026-10-23-02-08-37.jpg)
 *Figure 5: Physical benchtop test arrangement showing interconnected components, common ground distribution, and motor driver cabling.*
 
+> **Time spent:** 4 hours
+
 ### Testing & Verification Status
 This table explicitly differentiates features verified through physical assets from those based on source-code inspection:
 
@@ -193,6 +208,8 @@ This table explicitly differentiates features verified through physical assets f
 ![Custom 3D-Printed Chassis Assembly ("The Nonchalant")](docs/PHOTO-2026-10-23-01-56-13.jpg)
 *Figure 6: Custom 3D-printed chassis components assembled with TT geared motors, demonstrating mechanical enclosure design.*
 
+> **Time spent:** 3 hours
+
 ### Future Improvements
 - [ ] **High-Efficiency MOSFET Motor Driver:** Transition from the L298N to a modern driver (e.g., TB6612FNG or DRV8833) to reduce thermal loss and extend battery runtime.
 - [ ] **Bidirectional Telemetry Feedback:** Implement two-way ESP-NOW messaging to report battery voltage levels and obstacle proximity alarms back to the controller.
@@ -200,13 +217,24 @@ This table explicitly differentiates features verified through physical assets f
 - [ ] **Non-Blocking Ultrasonic Sampling:** Replace `pulseIn()` with timer input capture or FreeRTOS task scheduling to eliminate telemetry blocking delays.
 
 ### 3D CAD Models & Mechanical Assets
-The mechanical structure was custom designed and 3D printed for this project. All STL fabrication files are located in [3D Cad/](3D%20Cad):
+The mechanical structure was custom designed and 3D printed for this project. All STL fabrication mesh files are located in [3D Cad/](3D%20Cad):
 - `The Nonchalant.stl`: Front nameplate with custom embossed title text
 - `Body22.stl`: Main structural lower chassis panel
 - `Body51.stl`: Upper electronics deck plate
 - `Component2.stl`: Standoff and motor mounting bracket
 - `Body25.stl`: Structural brace and fastener anchor
 - `Body21 (3) (1) (1) (1) (1) (2) (1).stl`: Side fender / wheel clearance panel
+
+#### CAD Source Inspection & Parametric Modeling Analysis
+1. **Original CAD Source Tool:** Binary header analysis of the STL files reveals the signature `STLB ATF 14.21.0.0` (Autodesk Translation Framework), confirming the parts were modeled and exported using **Autodesk Fusion 360**.
+2. **How to Obtain or Export Genuine Editable Sources:**
+   - In Autodesk Fusion 360: Open the project and select **File > Export > Autodesk Fusion Archive (`.f3d`)** for the complete parametric feature tree, or export as **STEP (`.step` / `.stp`)** for standardized solid B-Rep geometry.
+   - In FreeCAD: Model parts parametrically using the *Part Design Workbench* and save as native `.FCStd` archives.
+   - In OpenSCAD: Model parts programmatically and save as `.scad`.
+3. **Is Mesh-to-STEP Conversion Sufficient?**
+   - Automated conversion of a triangulated STL mesh into a STEP file (e.g., via FreeCAD's *Mesh to Shape / Convert to Solid* or Fusion 360's *Mesh to BRep*) wraps triangular facets into planar B-Rep faces.
+   - While technically a valid STEP format container, the result contains thousands of faceted planar triangles. It **lacks** parametric sketches, editable dimensions, cylindrical hole features, and sketch constraints.
+   - For engineering customization, genuine parametric models (`.f3d` or native solid `.step` files) are strongly preferred over automated tessellated conversions. File extensions must never be faked by merely renaming `.stl` to `.step`.
 
 ### Repository Directory Structure
 ```text
@@ -234,7 +262,8 @@ Gesture-Controlled-Car/
 │   ├── WiFi.h
 │   ├── Wire.h
 │   └── esp_now.h
-└── JOURNAL.md                             # Project journal and technical documentation
+├── JOURNAL.md                             # 5-stage project build journal for Forge
+└── README.md                              # Main repository landing page & BOM documentation
 ```
 
 > [!NOTE]
