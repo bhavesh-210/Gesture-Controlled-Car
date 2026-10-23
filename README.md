@@ -39,7 +39,7 @@ The prices below were checked on **23 October 2026** from the linked Indian reta
 | Item | Specification / selection | Qty. | Unit price (incl. GST) | Line total | Buying link |
 |---|---|---:|---:|---:|---|
 | ESP32 development board | Generic ESP-WROOM-32-style Wi-Fi/Bluetooth board; exact installed brand not identified | 2 | ₹400.02 | ₹800.04 | [ElectronicsComp](https://www.electronicscomp.com/esp32-development-board-with-wifi-bluetooth-india) |
-| IMU gesture sensor | MPU-9250 9-axis module; match the installed board layout | 1 | ₹442.50 | ₹442.50 | [ElectronicsComp](https://www.electronicscomp.com/mpu9250-9-axis-gyro-accelerometer-module) |
+| IMU gesture sensor | MPU-9250 9-axis module; match the installed board layout | 1 | ₹442.50 | ₹442.50 | [ElectronicsComp](https://www.electronicscomp.com/development-board-programmer/arduino/mpu9250-9-axis-gyro-accelerometer-module?limit=50) |
 | Motor driver | L298N dual H-bridge module | 1 | ₹186.44 | ₹186.44 | [ElectronicsComp](https://www.electronicscomp.com/stepper-motor-drivers/l298n-dual-h-bridge-dc-stepper-motor-driver-controller-module) |
 | TT/BO geared DC motors | Reference alternative: 6 V, 230 RPM, dual-side shaft; exact installed RPM is not documented. Select this specific variant on the seller's motor listings | 4 | ₹128.00 | ₹512.00 | [Robu.in motor variants](https://robu.in/product-category/straight-bo-motors/) |
 | Robot wheels | Reference alternative: 65 mm yellow-rim BO-motor-compatible wheel | 4 | ₹44.84 | ₹179.36 | [ElectronicsComp](https://www.electronicscomp.com/65mm-robot-wheel-for-bo-motors-yellow) |
