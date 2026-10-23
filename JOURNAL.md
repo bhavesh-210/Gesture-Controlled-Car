@@ -226,35 +226,31 @@ Time spent: 3 hours
 - [ ] **Non-Blocking Ultrasonic Sampling:** Replace `pulseIn()` with timer input capture or FreeRTOS task scheduling to eliminate telemetry blocking delays.
 
 ### 3D CAD Models & Mechanical Assets
-The mechanical structure was custom designed and 3D printed for this project. All STL fabrication mesh files are located in [3D Cad/](3D%20Cad):
-- `The Nonchalant.stl`: Front nameplate with custom embossed title text
-- `Body22.stl`: Main structural lower chassis panel
-- `Body51.stl`: Upper electronics deck plate
-- `Component2.stl`: Standoff and motor mounting bracket
-- `Body25.stl`: Structural brace and fastener anchor
-- `Body21 (3) (1) (1) (1) (1) (2) (1).stl`: Side fender / wheel clearance panel
+The mechanical structure was custom designed and 3D printed for this project. The [3D Cad/](3D%20Cad) directory contains both the native editable CAD sources and ready-to-print STL meshes:
 
-#### CAD Source Inspection & Parametric Modeling Analysis
-1. **Original CAD Source Tool:** Binary header analysis of the STL files reveals the signature `STLB ATF 14.21.0.0` (Autodesk Translation Framework), confirming the parts were modeled and exported using **Autodesk Fusion 360**.
-2. **How to Obtain or Export Genuine Editable Sources:**
-   - In Autodesk Fusion 360: Open the project and select **File > Export > Autodesk Fusion Archive (`.f3d`)** for the complete parametric feature tree, or export as **STEP (`.step` / `.stp`)** for standardized solid B-Rep geometry.
-   - In FreeCAD: Model parts parametrically using the *Part Design Workbench* and save as native `.FCStd` archives.
-   - In OpenSCAD: Model parts programmatically and save as `.scad`.
-3. **Is Mesh-to-STEP Conversion Sufficient?**
-   - Automated conversion of a triangulated STL mesh into a STEP file (e.g., via FreeCAD's *Mesh to Shape / Convert to Solid* or Fusion 360's *Mesh to BRep*) wraps triangular facets into planar B-Rep faces.
-   - While technically a valid STEP format container, the result contains thousands of faceted planar triangles. It **lacks** parametric sketches, editable dimensions, cylindrical hole features, and sketch constraints.
-   - For engineering customization, genuine parametric models (`.f3d` or native solid `.step` files) are strongly preferred over automated tessellated conversions. File extensions must never be faked by merely renaming `.stl` to `.step`.
+- **Parametric CAD Archive:**
+  - `The Nonchalant (1).f3d`: Autodesk Fusion 360 parametric design archive preserving the complete feature tree, sketches, and dimensional constraints.
+- **Interchangeable STEP Solid Models:**
+  - `The Nonchalant.step`: Embossed front nameplate solid model
+  - `Body22.step`: Lower chassis baseplate solid model
+  - `Body51.step`: Upper electronics deck solid model
+  - `Component2.step`: Motor mount standoff solid model
+  - `Body25.step`: Structural bracket solid model
+  - `Body21 (3) (1) (1) (1) (1) (2) (1).step`: Side fender clearance panel solid model
+- **Fabrication Meshes (STL):**
+  - All matching `.stl` files (`The Nonchalant.stl`, `Body22.stl`, `Body51.stl`, `Component2.stl`, `Body25.stl`, `Body21 (...).stl`) for slicing and 3D printing.
 
 ### Repository Directory Structure
 ```text
 Gesture-Controlled-Car/
-├── 3D Cad/                                # 3D printable mechanical CAD files (STL format)
-│   ├── Body21 (3) (1) (1) (1) (1) (2) (1).stl
-│   ├── Body22.stl                         # Structural chassis panel
-│   ├── Body25.stl                         # Structural bracket
-│   ├── Body51.stl                         # Top deck plate
-│   ├── Component2.stl                     # Motor mount standoff
-│   └── The Nonchalant.stl                 # Embossed front nameplate
+├── 3D Cad/                                # Mechanical CAD models (F3D, STEP, and STL)
+│   ├── The Nonchalant (1).f3d             # Fusion 360 parametric source archive
+│   ├── The Nonchalant.step & .stl         # Front nameplate
+│   ├── Body22.step & .stl                 # Lower chassis baseplate
+│   ├── Body51.step & .stl                 # Upper deck plate
+│   ├── Component2.step & .stl             # Motor mount standoff
+│   ├── Body25.step & .stl                 # Structural bracket
+│   └── Body21 (...).step & .stl           # Side fender panel
 ├── GestureCarReceiver/
 │   └── GestureCarReceiver.ino             # Car receiver, motor driver & obstacle firmware
 ├── GestureController/

@@ -182,18 +182,19 @@ The receiver code uses the ESP32 Arduino Core v2.x LEDC API (`ledcSetup`, `ledcA
 ![3D model of the car and printed chassis assembly](docs/PHOTO-2026-10-23-01-56-13.jpg)
 *Figure: Custom 3D-printed chassis assembly ("The Nonchalant") featuring the embossed front bumper plate, motor mounting brackets, and top electronics deck.*
 
-The [3D Cad folder](3D%20Cad/) contains STL mesh exports for the custom chassis parts (`The Nonchalant.stl`, `Body22.stl`, `Body51.stl`, `Component2.stl`, `Body25.stl`, `Body21 (...).stl`). Fabrication cost is not included in the BOM total.
+The [3D Cad folder](3D%20Cad/) contains both genuine editable CAD sources and ready-to-slice STL meshes for the custom chassis parts:
 
-- **CAD Provenance:** Inspection of the binary STL headers reveals the signature `STLB ATF 14.21.0.0` (Autodesk Translation Framework), showing the parts were designed in and exported from **Autodesk Fusion 360**.
-- **How to Export Genuine Editable Sources:**
-  - In Autodesk Fusion 360: Open the project and select **File > Export > Autodesk Fusion Archive (`.f3d`)** to preserve sketches and the parametric timeline, or **STEP (`.step` / `.stp`)** for standardized solid B-Rep geometry.
-  - In FreeCAD: Model parts parametrically using the *Part Design Workbench* and save as native `.FCStd` archives.
-  - In OpenSCAD: Model parts programmatically using CSG code and save as `.scad`.
-- **Is Mesh-to-STEP Conversion Sufficient?**
-  - Converting an STL mesh to a STEP file (e.g., via FreeCAD's *Mesh to Shape / Convert to Solid* or Fusion 360's *Mesh to BRep*) merely wraps triangular facets into planar B-Rep faces.
-  - While technically a valid STEP format container, the resulting file contains thousands of flat triangular planar facets. It **lacks** parametric sketches, editable dimensional constraints, analytical cylinders, and sketch relations.
-  - For true engineering flexibility, a native parametric model (`.f3d` or native solid `.step`) is strongly preferred over an automated tessellated mesh-to-STEP conversion.
-  - File extensions must never be faked by merely renaming `.stl` to `.step`. No PCB designs were invented.
+- **Parametric CAD Source:**
+  - `The Nonchalant (1).f3d`: Complete Autodesk Fusion 360 project archive containing full parametric sketch history, dimensional constraints, and feature timeline.
+- **Interchangeable Solid Models (STEP):**
+  - `The Nonchalant.step`: Embossed front nameplate solid B-Rep model
+  - `Body22.step`: Main structural lower chassis panel
+  - `Body51.step`: Upper electronics deck plate
+  - `Component2.step`: Motor mounting bracket standoff
+  - `Body25.step`: Structural brace and fastener anchor
+  - `Body21 (3) (1) (1) (1) (1) (2) (1).step`: Side clearance panel
+- **Fabrication Meshes (STL):**
+  - Slicing meshes corresponding to each part (`The Nonchalant.stl`, `Body22.stl`, `Body51.stl`, `Component2.stl`, `Body25.stl`, `Body21 (...).stl`) for immediate 3D printing. Fabrication cost is not included in the BOM total.
 
 ### Possible future improvements
 
