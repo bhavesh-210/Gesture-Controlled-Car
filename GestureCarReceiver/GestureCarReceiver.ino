@@ -2,42 +2,42 @@
 #include <WiFi.h>
 #include <esp_now.h>
 
-/* ================= MOTOR PINS ================= */
+// Motor driver direction pins (L298N)
 const int LIN1 = 26;
 const int LIN2 = 25;
 
 const int RIN1 = 17;
 const int RIN2 = 16;
 
-/* ================= PWM PINS ================= */
+// PWM speed control pins (L298N enable pins)
 #define PWMA 32
 #define PWMB 33
 
 #define PWM_FREQ 1000
-#define PWM_RES 8       // 8-bit (0–255)
+#define PWM_RES 8       // 8-bit resolution (0-255)
 #define CH_A 0
 #define CH_B 1
 
-/* ================= ULTRASONIC ================= */
+// HC-SR04 ultrasonic sensor pins
 #define TRIG_PIN 18
 #define ECHO_PIN 19
-#define OBSTACLE_DISTANCE 20   // cm
+#define OBSTACLE_DISTANCE 20   // Distance threshold in cm
 
-/* ================= VARIABLES ================= */
+// Motor direction state
 bool Reversed = false;
 int Out1 = HIGH;
 int Out2 = LOW;
 
-int motorSpeed = 180;   // 🔥 VARIABLE SPEED (0–255)
+int motorSpeed = 180;   // Motor driving speed (0-255)
 
-/* ================= ESP-NOW STRUCT ================= */
+// Structure to receive commands over ESP-NOW
 typedef struct struct_message {
   int comand_id;
 } struct_message;
 
 struct_message Comand;
 
-/* ================= FUNCTION DECLARATIONS ================= */
+// Function declarations
 void Forward();
 void Left();
 void Right();
@@ -51,19 +51,20 @@ void OnDataRecv(const esp_now_recv_info *info,
                 const uint8_t *incomingData,
                 int len);
 
-/* ================= SETUP ================= */
 void setup() {
   Serial.begin(115200);
 
+  // Set motor direction pins as outputs
   pinMode(LIN1, OUTPUT);
   pinMode(LIN2, OUTPUT);
   pinMode(RIN1, OUTPUT);
   pinMode(RIN2, OUTPUT);
 
+  // Set ultrasonic pins
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
-  /* ===== PWM SETUP ===== */
+  // Configure PWM for speed control
   ledcSetup(CH_A, PWM_FREQ, PWM_RES);
   ledcSetup(CH_B, PWM_FREQ, PWM_RES);
 
@@ -75,6 +76,7 @@ void setup() {
 
   Brake();
 
+  // Initialize ESP-NOW
   WiFi.mode(WIFI_STA);
   if (esp_now_init() != ESP_OK) {
     Serial.println("ESP-NOW init failed");
@@ -85,10 +87,10 @@ void setup() {
   Serial.println("ESP-NOW Ready");
 }
 
-/* ================= LOOP ================= */
 void loop() {
   CheckReverse();
 
+  // If an obstacle is detected within 20 cm, brake and turn right
   if (obstacleDetected()) {
     Brake();
     delay(200);
@@ -98,7 +100,7 @@ void loop() {
   }
 }
 
-/* ================= ESP-NOW CALLBACK ================= */
+// Callback triggered whenever a command packet is received
 void OnDataRecv(const esp_now_recv_info *info,
                 const uint8_t *incomingData,
                 int len) {
@@ -115,7 +117,6 @@ void OnDataRecv(const esp_now_recv_info *info,
   }
 }
 
-/* ================= REVERSE ================= */
 void CheckReverse() {
   if (Reversed) {
     Out1 = LOW;
@@ -126,7 +127,7 @@ void CheckReverse() {
   }
 }
 
-/* ================= ULTRASONIC ================= */
+// Read obstacle distance using HC-SR04
 long getDistance() {
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
@@ -144,7 +145,6 @@ bool obstacleDetected() {
   return getDistance() <= OBSTACLE_DISTANCE;
 }
 
-/* ================= MOVEMENT ================= */
 void Forward() {
   if (obstacleDetected()) {
     Brake();
@@ -161,8 +161,8 @@ void Forward() {
 }
 
 void Left() {
-  ledcWrite(CH_A, 0);          // left motor stop
-  ledcWrite(CH_B, motorSpeed);
+  ledcWrite(CH_A, 0);          // Stop left wheels
+  ledcWrite(CH_B, motorSpeed); // Drive right wheels
 
   digitalWrite(LIN1, LOW);
   digitalWrite(LIN2, LOW);
@@ -171,8 +171,8 @@ void Left() {
 }
 
 void Right() {
-  ledcWrite(CH_A, motorSpeed);
-  ledcWrite(CH_B, 0);          // right motor stop
+  ledcWrite(CH_A, motorSpeed); // Drive left wheels
+  ledcWrite(CH_B, 0);          // Stop right wheels
 
   digitalWrite(RIN1, LOW);
   digitalWrite(RIN2, LOW);

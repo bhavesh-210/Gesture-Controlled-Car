@@ -3,6 +3,11 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
+#include <math.h>
+
+#ifndef PI
+#define PI 3.14159265358979323846
+#endif
 
 // Basic pin states
 #ifndef HIGH
@@ -43,7 +48,3 @@ inline void ledcWrite(int, int) {}
 inline unsigned long pulseIn(int /*pin*/, int /*value*/, unsigned long /*timeout*/=0) { return 0; }
 
 typedef unsigned long unsigned_long_t;
-
-void pinMode(int, int);
-void digitalWrite(int, int);
-void delay(unsigned long ms);

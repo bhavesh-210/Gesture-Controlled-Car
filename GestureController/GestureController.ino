@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <WiFi.h>
 #include <esp_now.h>
 #include <Wire.h>
@@ -8,7 +9,7 @@
 
 MPU9250_asukiaaa mpu;
 
-/* Match receiver command IDs */
+// Command IDs
 enum Command {
   FORWARD = 0,
   LEFT_CMD = 1,
@@ -17,15 +18,19 @@ enum Command {
   REVERSE_CMD = 4
 };
 
-/* Match receiver struct */
+// Message structure sent over ESP-NOW
 typedef struct struct_message {
   int comand_id;
 } struct_message;
 
 struct_message packet;
 
-/* Change this to your car ESP32 MAC */
+// Car receiver MAC address (update with your receiver ESP32 MAC)
 uint8_t carMAC[] = { 0x24, 0x6F, 0x28, 0xAA, 0xBB, 0xCC };
+
+// Function declarations
+int detectCommand(float pitch, float roll);
+void printCommand(int cmd);
 
 void setup() {
   Serial.begin(115200);
@@ -62,6 +67,7 @@ void loop() {
   float ay = mpu.accelY();
   float az = mpu.accelZ();
 
+  // Calculate tilt angles in degrees
   float pitch = atan2(ax, sqrt(ay * ay + az * az)) * 180 / PI;
   float roll  = atan2(ay, sqrt(ax * ax + az * az)) * 180 / PI;
 
