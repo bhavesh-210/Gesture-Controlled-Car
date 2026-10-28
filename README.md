@@ -1,173 +1,160 @@
 # Gesture-Controlled Car — The Nonchalant
 
-A 4WD robotic car controlled using hand gestures. The project uses two ESP32 microcontrollers communicating over ESP-NOW, an MPU-9250 IMU on the hand controller to measure tilt angles, an L298N motor driver with PWM speed regulation on the car, an HC-SR04 ultrasonic sensor for obstacle avoidance, and a custom 3D-printed chassis.
+A small four-wheel-drive robot that I can steer by tilting my hand instead of using a phone or a conventional remote.
 
-![Completed Gesture-Controlled Car](docs/PHOTO-2026-10-23-01-56-13.jpg)
+![The assembled car](docs/PHOTO-2026-10-23-01-56-13.jpg)
 
-For the detailed 5-stage build log with design entries, testing notes, and time allocations, check out [JOURNAL.md](JOURNAL.md).
+The idea is straightforward: an MPU-9250 motion sensor reads the tilt of a handheld controller, an ESP32 turns that movement into a command, and a second ESP32 on the car receives it over ESP-NOW. An L298N motor driver handles the wheels. I also added an ultrasonic sensor at the front so the car can react when something is close to it.
 
-## Project Overview
+This repository contains both Arduino sketches, the wiring reference, the component list, the Fusion 360 design, and photos and a short video of the build. The more personal notes about the process are in [JOURNAL.md](JOURNAL.md).
 
-Instead of controlling the car with a smartphone screen or a standard analog joystick, this project lets you drive the car using natural hand movements:
-- Tilt your hand forward to drive forward.
-- Tilt left or right to steer.
-- Keep your hand flat to brake.
-- Tilt back to toggle reverse.
+## See it in action
 
-The transmitter reads your hand's pitch and roll using an MPU-9250 sensor and broadcasts command packets to the car over ESP-NOW every 100 ms. The car executes the commands and uses a front-facing HC-SR04 ultrasonic sensor to detect obstacles within 20 cm, automatically stopping and steering away to avoid collisions.
+- [Driving demo](docs/VIDEO-2026-10-23-02-05-10.mp4)
+- [Photo of the assembled car](docs/PHOTO-2026-10-23-01-56-13.jpg)
+- [Inside the chassis](docs/PHOTO-2026-10-23-02-08-37.jpg)
 
-### Demo Video
+## What it does
 
-Watch the car in action: [Project Demo Video](docs/VIDEO-2026-10-23-02-05-10.mp4)
+I wanted the controls to feel simple enough that I wouldn't have to think about buttons. The controller checks its pitch and roll and chooses one of five commands:
 
-### Key Features
+| Hand movement | Command | What the car does |
+| --- | --- | --- |
+| Tilt forward | `FORWARD` | Drives both sides forward |
+| Tilt left | `LEFT_CMD` | Stops the left wheels and runs the right wheels |
+| Tilt right | `RIGHT_CMD` | Stops the right wheels and runs the left wheels |
+| Hold level | `BRAKE_CMD` | Stops the motors |
+| Tilt backward | `REVERSE_CMD` | Toggles the reverse-direction setting |
 
-- Direct ESP-NOW wireless: Fast, peer-to-peer transmission between two ESP32s with low latency and without needing a Wi-Fi router.
-- 5 discrete gesture commands: Forward, Left turn, Right turn, Brake/Stop, and Reverse toggle.
-- Hardware PWM speed control: Uses ESP32 LEDC PWM channels at 1000 Hz for smooth acceleration and speed regulation.
-- Collision avoidance: HC-SR04 ultrasonic sensor automatically halts and pivots the car if an obstacle is within 20 cm.
-- Custom 3D-printed chassis: Designed in Autodesk Fusion 360 to house four TT gear motors, battery pack, motor driver, and microcontrollers.
+The threshold is **15°** in the current sketch. Pitch takes priority over roll, so a strong forward or backward tilt wins if the hand is tilted diagonally. The controller sends a command roughly every **100 ms**.
 
----
+Reverse is worth explaining: the backward gesture does **not** continuously issue a reverse-drive command. It toggles a direction flag on the receiver. The next drive command uses that direction. As the code stands, keeping the hand tilted backward can flip the flag repeatedly; adding gesture debouncing is on my list of fixes.
 
-## Hardware & Circuit Design
+## How the pieces work together
 
-### Wiring Diagram & Build Photos
-
-#### Circuit Schematic
-![Gesture controller circuit and wiring diagram](docs/circuit-diagram.png)
-*Schematic wiring for transmitter ESP32 and MPU-9250 IMU.*
-
-#### Assembled Chassis & Electronics
-![Actual assembled hardware and internal electronics](docs/PHOTO-2026-10-23-02-08-37.jpg)
-*Internal wiring showing ESP32 receiver, L298N driver, TT gearmotors, battery pack, and power switch.*
-
-### Bill of Materials (BOM)
-
-| Item | Component | Qty | Approx Price (INR) | Total (INR) | Source / Buying Link | Purpose |
-| :--- | :--- | :---: | ---: | ---: | :--- | :--- |
-| ESP32 Dev Board | ESP-WROOM-32 (30-pin) | 2 | ₹400.00 | ₹800.00 | [ElectronicsComp](https://www.electronicscomp.com/esp32-development-board-with-wifi-bluetooth-india) | 1x transmitter, 1x car receiver |
-| IMU Sensor | MPU-9250 9-axis module | 1 | ₹442.00 | ₹442.00 | [ElectronicsComp](https://www.electronicscomp.com/development-board-programmer/arduino/mpu9250-9-axis-gyro-accelerometer-module?limit=50) | Hand tilt angle detection |
-| Motor Driver | L298N Dual H-Bridge | 1 | ₹186.00 | ₹186.00 | [ElectronicsComp](https://www.electronicscomp.com/stepper-motor-drivers/l298n-dual-h-bridge-dc-stepper-motor-driver-controller-module) | Drives the 4 DC motors with PWM |
-| Geared Motors | Yellow BO DC motors (6V) | 4 | ₹128.00 | ₹512.00 | [Robu.in](https://robu.in/product-category/straight-bo-motors/) | 4WD drivetrain |
-| Wheels | 65 mm rubber wheels | 4 | ₹45.00 | ₹180.00 | [ElectronicsComp](https://www.electronicscomp.com/65mm-robot-wheel-for-bo-motors-yellow) | Pressed onto TT motor shafts |
-| Distance Sensor | HC-SR04 ultrasonic sensor | 1 | ₹79.00 | ₹79.00 | [Robu.in](https://robu.in/product/hc-sr04-ultrasonic-range-finder/) | Front obstacle detection |
-| Battery Pack | 7.4V 2S Li-ion rechargeable pack | 1 | ₹765.00 | ₹765.00 | [ElectronicsComp](https://www.electronicscomp.com/7.4v-2600mah-li-ion-battery-pack-inbuilt-bms-protection) | Main power supply for car |
-| Jumper Wires | M-F and M-M jumpers (40 pcs) | 1 pack | ₹64.00 | ₹64.00 | [ElectronicsComp](https://www.electronicscomp.com/male-to-female-jumper-wires-10cm-40-pieces-pack) | Prototyping & connections |
-| Power Switch | SPST rocker switch | 1 | ₹20.00 | ₹20.00 | Local electronics shop | Master power toggle |
-| 3D Chassis Parts | 3D printed PLA chassis parts | 1 set | ₹0.00 | ₹0.00 | Self-printed ([3D Cad/](3D%20Cad)) | Frame, deck plates, and brackets |
-
-A complete CSV version is available in [BOM.csv](BOM.csv).
-
----
-
-## Pinout & Connections
-
-### Hand Controller Wiring (I2C)
-
-| ESP32 Pin | MPU-9250 Pin | Wire Color (in diagram) | Function |
-| :--- | :--- | :--- | :--- |
-| **3V3** | VCC | Red | 3.3V Power |
-| **GND** | GND | Black | Ground |
-| **GPIO 14** | SCL | Green | I2C Clock |
-| **GPIO 15** | SDA | Blue | I2C Data |
-
-### Car Receiver Pinout
-
-| Signal | ESP32 GPIO | Direction | Function |
-| :--- | :--- | :--- | :--- |
-| **LIN1** | GPIO 26 | Output | Left motor direction 1 |
-| **LIN2** | GPIO 25 | Output | Left motor direction 2 |
-| **RIN1** | GPIO 17 | Output | Right motor direction 1 |
-| **RIN2** | GPIO 16 | Output | Right motor direction 2 |
-| **PWMA** | GPIO 32 | Output (PWM) | Left motor speed (LEDC Channel 0) |
-| **PWMB** | GPIO 33 | Output (PWM) | Right motor speed (LEDC Channel 1) |
-| **TRIG_PIN** | GPIO 18 | Output | Ultrasonic trigger pulse (10 µs) |
-| **ECHO_PIN** | GPIO 19 | Input | Ultrasonic echo pulse |
-
-*Note on ECHO Pin Voltage:* The HC-SR04 runs on 5V and outputs 5V on ECHO. Because ESP32 pins are rated for 3.3V, use a simple resistor divider (1kΩ and 2kΩ) on the ECHO pin to drop the signal safely to 3.3V before connecting to GPIO 19.
-
----
-
-## Gesture Commands
-
-The hand controller calculates pitch and roll from accelerometer data:
-```cpp
-float pitch = atan2(ax, sqrt(ay * ay + az * az)) * 180 / PI;
-float roll  = atan2(ay, sqrt(ax * ax + az * az)) * 180 / PI;
+```text
+Hand controller                          Car
+MPU-9250                                ESP32 receiver
+   | I2C                                   | 
+ESP32 transmitter -- ESP-NOW packet -->   +-- L298N --> 4 DC motors
+                                          |
+                                          +-- HC-SR04 distance sensor
 ```
 
-Tilt angles map directly to movement commands:
+Only a small command ID travels over the wireless connection; the car decides how to drive its motors based on that ID. ESP-NOW works directly between the two ESP32 boards, so the project doesn't need a Wi-Fi router or a phone app.
 
-| Command ID | Name | Hand Tilt Condition | Car Action |
-| :---: | :--- | :--- | :--- |
-| **0** | `FORWARD` | Hand tilted forward (`pitch > 15°`) | Both motors run forward at set speed |
-| **1** | `LEFT_CMD` | Hand tilted left (`roll < -15°`) | Left motor stops, right motor runs forward |
-| **2** | `RIGHT_CMD` | Hand tilted right (`roll > 15°`) | Right motor stops, left motor runs forward |
-| **3** | `BRAKE_CMD` | Hand flat/level (`-15° <= pitch, roll <= 15°`) | All motor pins LOW, PWM set to 0 |
-| **4** | `REVERSE_CMD` | Hand tilted back (`pitch < -15°`) | Toggles direction polarity to drive in reverse |
+The receiver uses two **1 kHz, 8-bit PWM** channels, one for the left motors and one for the right. The current speed setting is `180` out of `255`. This is a fixed duty cycle, not proportional speed control: tilting your hand farther does not yet make the car faster.
 
----
+### Obstacle response
 
-## How to Set Up & Flash
+The HC-SR04 checks the distance in front of the car. When it reads **20 cm or less**, the receiver's main loop brakes, pauses for **200 ms**, turns right for **350 ms**, and brakes again. The `Forward()` function also checks distance before driving. This is a basic obstacle response, not full navigation or obstacle mapping, and it may not avoid every collision. The ultrasonic reading and the timed turn can block parts of the program; there is room to improve that.
 
-### Prerequisites
-1. Install [Arduino IDE](https://www.arduino.cc/en/software).
-2. Add ESP32 board support via Boards Manager (`esp32` by Espressif Systems).
-3. Install the `MPU9250_asukiaaa` library from the Arduino Library Manager.
+## Parts used
 
-### Uploading Code
-1. **Find Receiver MAC Address:** Flash a simple sketch with `WiFi.macAddress()` to your car's ESP32 and open Serial Monitor to get its MAC address.
-2. **Configure Controller:** Open `GestureController/GestureController.ino` and replace `carMAC` with your car ESP32's MAC address:
-   ```cpp
-   uint8_t carMAC[] = { 0x24, 0x6F, 0x28, 0xAA, 0xBB, 0xCC };
+| Part | Quantity | Purpose |
+| --- | ---: | --- |
+| ESP32 development board (ESP-WROOM-32) | 2 | One for the hand controller, one for the car |
+| MPU-9250 IMU | 1 | Measures hand movement |
+| L298N dual H-bridge driver | 1 | Runs the left and right motor pairs |
+| 6V TT/BO geared motors | 4 | Four-wheel drivetrain |
+| 65 mm wheels | 4 | Wheels for the geared motors |
+| HC-SR04 ultrasonic sensor | 1 | Measures distance to objects ahead |
+| 7.4V 2S rechargeable battery pack | 1 | Car power source |
+| Jumper wires and rocker switch | As needed | Connections and power control |
+| Custom printed chassis parts | 1 set | Holds the hardware together |
+
+See [BOM.csv](BOM.csv) for the itemized parts, example supplier links, and approximate prices. The listed prices are estimates, not a guarantee of current costs. Printing costs are not included in the BOM's ₹0 chassis entry.
+
+## Wiring
+
+![Controller circuit diagram](docs/circuit-diagram.png)
+
+### Controller: ESP32 to MPU-9250
+
+| ESP32 | MPU-9250 |
+| --- | --- |
+| `3V3` | `VCC` |
+| `GND` | `GND` |
+| `GPIO 15` | `SDA` |
+| `GPIO 14` | `SCL` |
+
+The sketch uses `Wire.begin(15, 14)`.
+
+### Car: ESP32 pins
+
+| Function | ESP32 GPIO |
+| --- | --- |
+| L298N left direction 1 (`LIN1`) | 26 |
+| L298N left direction 2 (`LIN2`) | 25 |
+| L298N right direction 1 (`RIN1`) | 17 |
+| L298N right direction 2 (`RIN2`) | 16 |
+| Left speed / L298N `ENA` | 32 |
+| Right speed / L298N `ENB` | 33 |
+| HC-SR04 `TRIG` | 18 |
+| HC-SR04 `ECHO` | 19 |
+
+**Important:** A typical HC-SR04 powered at 5 V can output a 5 V echo pulse, while an ESP32 GPIO is **not 5 V tolerant**. Use a suitable level shifter or voltage divider on the echo signal before connecting it to GPIO 19. Also make sure the receiver, driver, and sensors have the correct supplies and a shared ground. Do not connect the 7.4 V battery directly to an ESP32's 3.3 V pin. Check the power path against your specific board and modules before switching the car on.
+
+## Getting the code running
+
+This is an Arduino-based ESP32 project. You'll need the Arduino IDE, an ESP32 board package, and the `MPU9250_asukiaaa` library for the controller sketch.
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/bhavesh-210/Gesture-Controlled-Car.git
+   cd Gesture-Controlled-Car
    ```
-3. **Flash Controller:** Upload `GestureController/GestureController.ino` to the hand controller ESP32.
-4. **Flash Receiver:** Upload `GestureCarReceiver/GestureCarReceiver.ino` to the car ESP32.
 
-*Note on ESP32 Core:* The receiver code uses the ESP32 Core v2.x LEDC API (`ledcSetup`, `ledcAttachPin`, `ledcWrite`). If compiling under Core v3.x+, adjust to the newer `ledcAttach` function syntax.
+2. Install **ESP32 by Espressif Systems** through Arduino IDE's Boards Manager and install **MPU9250_asukiaaa** through Library Manager.
+3. Find the car ESP32's **station MAC address**, for example by running a short sketch that prints `WiFi.macAddress()` after `WiFi.mode(WIFI_STA)`.
+4. Replace the example address in `GestureController/GestureController.ino` with the actual receiver address:
 
----
+   ```cpp
+   uint8_t carMAC[] = { 0x24, 0x6F, 0x28, 0xAA, 0xBB, 0xCC }; // example only
+   ```
 
-## Testing & Lessons Learned
+5. Upload [GestureCarReceiver.ino](GestureCarReceiver/GestureCarReceiver.ino) to the car ESP32 and [GestureController.ino](GestureController/GestureController.ino) to the controller ESP32.
+6. For initial checks, **keep the drive wheels off the ground**. Open Serial Monitor at **115200 baud** on the controller and check which commands appear as you tilt it. Verify the motor directions and neutral/stop behavior before trying it on a clear floor.
 
-- **Bench Testing:** Always prop the car up with wheels off the ground when testing initial code. This confirms that all tilt angles spin the wheels in the right direction without runaway accidents.
-- **L298N Voltage Drop:** The L298N motor driver drops roughly 1.5V to 2.0V across its internal transistors. A standard 4.8V or 5V supply leaves too little voltage for the motors under chassis weight. Using a 7.4V 2S battery pack provides plenty of torque.
-- **Reverse Toggle Debounce:** Tilting backward repeatedly streams command `4` every 100 ms. Since command 4 toggles reverse mode, holding the gesture flips the direction repeatedly. Tilt back briefly to toggle, or add software state debouncing in firmware.
-- **Non-blocking Ultrasonic:** The `pulseIn()` function waits up to 30 ms if no echo is returned. In future revisions, using a non-blocking timer or FreeRTOS task will keep the main loop completely unblocked.
+**ESP32 core compatibility:** The motor code uses `ledcSetup` and `ledcAttachPin`, which are from the Arduino-ESP32 2.x LEDC API. It also uses the newer `esp_now_recv_info` receive callback form. Depending on your installed core version, these APIs may need to be reconciled before the receiver sketch compiles. I have not included a confirmed working core version here, so treat a compile check as part of setup rather than assuming it will work unchanged on every ESP32 installation.
 
----
+## The chassis
 
-## 3D CAD Files
+![CAD view of the car](docs/car-3d-model.svg)
 
-![Isometric CAD wireframe of The Nonchalant assembly](docs/car-3d-model.svg)
-*Chassis wireframe derived from 3D Cad/The Nonchalant.step.*
+The chassis is not an off-the-shelf car frame. I designed the layout in Fusion 360 to leave space for four motors, electronics, and the battery. The [3D Cad folder](3D%20Cad/) has the editable `.f3d` archive and `.step` files for the individual parts and assembly. The STEP files are solid CAD models; depending on your slicer, you may need to import them into CAD software and export printable meshes first.
 
-The [3D Cad/](3D%20Cad/) folder contains the full CAD project and solid models for 3D printing:
+![Hardware inside the car](docs/PHOTO-2026-10-23-02-08-37.jpg)
 
-- **Autodesk Fusion 360 Source:**
-  - `The Nonchalant (1).f3d`: Fully editable design archive with sketches, parameters, and timeline.
-- **STEP Solid Models (3D printable):**
-  - `The Nonchalant.step`: Front nameplate bumper
-  - `Body22.step`: Lower chassis baseplate
-  - `Body51.step`: Upper deck plate for electronics
-  - `Component2.step`: Motor mounting standoff
-  - `Body25.step`: Frame bracket
-  - `Body21 (...).step`: Side wheel clearance plate
+## Things I learned (and things I'd change)
 
-These parts can be sliced directly in PrusaSlicer, Cura, or Bambu Studio, or edited in Fusion 360 and FreeCAD.
+The biggest takeaway was that the car is more than just two sketches talking to each other. Motor voltage, the physical layout, wireless behavior, and the timing of sensor reads all matter once the wheels touch the ground.
 
----
+A few limitations are still in the current code:
 
-## Future Improvements
+- **Reverse toggling:** one held gesture can trigger several toggles. It needs an edge-triggered command or debounce logic.
+- **No wireless timeout stop:** the receiver doesn't currently stop the motors just because controller packets stop arriving. I'd add a watchdog before treating this as a dependable remote-controlled car.
+- **Blocking distance measurement:** `pulseIn()` can wait up to 30 ms; the obstacle-turn routine also uses delays.
+- **Fixed steering speed:** turns are on/off rather than scaled to hand tilt.
+- **Hardware and ESP32 core variation:** pin voltage levels and library versions need careful checking for each build.
 
-- Replace the L298N with a modern MOSFET motor driver (such as TB6612FNG or DRV8833) to reduce voltage drop and improve battery life.
-- Add two-way telemetry so the car can report battery voltage and obstacle alerts back to the controller.
-- Proportional steering to vary turn speed based on how far your hand tilts.
-- Non-blocking ultrasonic measurement with FreeRTOS tasks.
+My next changes would be a communication timeout, more reliable reverse handling, and proportional steering. A more efficient driver such as the TB6612FNG could also reduce losses compared with the L298N, provided it is appropriately rated for the motors.
 
----
+## Repository guide
 
-## Author & Credits
+```text
+GestureController/      Hand-motion reading and ESP-NOW transmitter sketch
+GestureCarReceiver/     ESP-NOW receiver, motor control and obstacle logic
+3D Cad/                Fusion 360 project and STEP solid models
+docs/                  Photos, circuit reference, CAD preview and demo video
+BOM.csv                Component list and example pricing
+JOURNAL.md             Development notes and reflections
+README.md              Overview and setup instructions
+```
 
-Built and documented by Bhavesh Sharma ([@bhavesh-210](https://github.com/bhavesh-210)). Feel free to use the code and CAD models for your own DIY robotics projects.
+## About this build
+
+I built **The Nonchalant** as a practical robotics project to learn how sensing, wireless communication, electronics, mechanical design, and embedded code work together. It is a hobby-scale prototype, not a safety-certified vehicle.
+
+**Bhavesh Sharma** · [GitHub @bhavesh-210](https://github.com/bhavesh-210)
